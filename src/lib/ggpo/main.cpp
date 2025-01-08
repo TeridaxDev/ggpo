@@ -12,12 +12,12 @@
 #include "ggponet.h"
 #include "network/connection_manager.h"
 
-BOOL WINAPI
-DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
-{
-    srand(Platform::GetCurrentTimeMS() + Platform::GetProcessID());
-    return TRUE;
-}
+//BOOL WINAPI
+//DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
+//{
+//    srand(Platform::GetCurrentTimeMS() + Platform::GetProcessID());
+//    return TRUE;
+//}
 
 void
 ggpo_log(GGPOSession* ggpo, const char* fmt, ...)

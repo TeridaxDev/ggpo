@@ -6,34 +6,34 @@
 #include <sstream>
 
 
-SOCKET
-CreateSocket(uint16 bind_port, int retries)
-{
-	SOCKET s;
-	sockaddr_in sin;
-	uint16 port;
-	int optval = 1;
-
-	s = socket(AF_INET, SOCK_DGRAM, 0);
-	setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (const char*)&optval, sizeof optval);
-	setsockopt(s, SOL_SOCKET, SO_DONTLINGER, (const char*)&optval, sizeof optval);
-
-	// non-blocking...
-	u_long iMode = 1;
-	ioctlsocket(s, FIONBIO, &iMode);
-
-	sin.sin_family = AF_INET;
-	sin.sin_addr.s_addr = htonl(INADDR_ANY);
-	for (port = bind_port; port <= bind_port + retries; port++) {
-		sin.sin_port = htons(port);
-		if (bind(s, (sockaddr*)&sin, sizeof sin) != SOCKET_ERROR) {
-			Log("Udp bound to port: %d.\n", port);
-			return s;
-		}
-	}
-	closesocket(s);
-	return INVALID_SOCKET;
-}
+//SOCKET
+//CreateSocket(uint16 bind_port, int retries)
+//{
+//	SOCKET s;
+//	sockaddr_in sin;
+//	uint16 port;
+//	int optval = 1;
+//
+//	s = socket(AF_INET, SOCK_DGRAM, 0);
+//	setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (const char*)&optval, sizeof optval);
+//	setsockopt(s, SOL_SOCKET, SO_DONTLINGER, (const char*)&optval, sizeof optval);
+//
+//	// non-blocking...
+//	u_long iMode = 1;
+//	ioctlsocket(s, FIONBIO, &iMode);
+//
+//	sin.sin_family = AF_INET;
+//	sin.sin_addr.s_addr = htonl(INADDR_ANY);
+//	for (port = bind_port; port <= bind_port + retries; port++) {
+//		sin.sin_port = htons(port);
+//		if (bind(s, (sockaddr*)&sin, sizeof sin) != SOCKET_ERROR) {
+//			Log("Udp bound to port: %d.\n", port);
+//			return s;
+//		}
+//	}
+//	closesocket(s);
+//	return INVALID_SOCKET;
+//}
 
 std::string ConnectionManager::ToString(int connection_id) {
 	ASSERT(_connection_map.count(connection_id));
@@ -47,11 +47,11 @@ void ConnectionManager::Log(const char* fmt, ...)
 	size_t offset;
 	va_list args;
 
-	strcpy_s(buf, "connection_manager | ");
+	strcpy(buf, "connection_manager | ");
 	offset = strlen(buf);
 	va_start(args, fmt);
-	vsnprintf(buf + offset, ARRAYSIZE(buf) - offset - 1, fmt, args);
-	buf[ARRAYSIZE(buf) - 1] = '\0';
+	vsnprintf(buf + offset, ARRAY_SIZE(buf) - offset - 1, fmt, args);
+	buf[ARRAY_SIZE(buf) - 1] = '\0';
 	::Log(buf);
 	va_end(args);
 }
@@ -93,7 +93,7 @@ int SteamConnection::RecvFrom(char* buffer, char** storage, int len, int flags, 
 	if (done == -1)
 		return done;
 
-	memcpy_s(*storage, len, buffer, done);
+	memcpy(*storage, buffer, done);
 
 	return done;
 }
